@@ -58,9 +58,27 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  const findByKey = (array, key) => array.find(el => el.getAttribute('data-key') === String(key));
 
+  const drumSounds = Array.from(document.getElementsByTagName('audio'));
+  const drumDivs = Array.from(document.getElementsByTagName('div'));
+
+  const playSound = (e) => {
+    const { key } = e;
+    const code = key.toUpperCase().charCodeAt(0);
+
+    const drumSound = findByKey(drumSounds, code);
+    if (!drumSound) {
+      return;
+    }
+    const drumDiv = findByKey(drumDivs, code);
+    drumDiv.className = 'key playing';
+    setTimeout(() => { drumDiv.className = 'key'; }, 200);
+    drumSound.play();
+  };
+
+  document.addEventListener('keyup', playSound);
 </script>
-
 
 </body>
 </html>
