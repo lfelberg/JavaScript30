@@ -58,21 +58,16 @@
   </style>
 
   <script>
-    const spacing = document.getElementById('spacing');
-    const blur = document.getElementById('blur');
-    const base = document.getElementById('base');
     const root = document.documentElement;
 
     const handleRangeChange = function change(e) {
-      console.log(this.id);
       let { value } = e.target;
       value = (this.id === 'base') ? value : `${value}px`;
       root.style.setProperty(`--${this.id}`, value);
     };
 
-    spacing.oninput = handleRangeChange;
-    base.oninput = handleRangeChange;
-    blur.oninput = handleRangeChange;
+    const inputs = document.querySelectorAll('.controls input');
+    inputs.forEach((inp) => { inp.addEventListener('input', handleRangeChange); });
   </script>
 
 </body>
