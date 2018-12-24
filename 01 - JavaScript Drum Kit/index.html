@@ -58,26 +58,31 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-  const findByKey = (array, key) => array.find(el => el.getAttribute('data-key') === String(key));
-
-  const drumSounds = Array.from(document.getElementsByTagName('audio'));
-  const drumDivs = Array.from(document.getElementsByTagName('div'));
+  const findByKey = (tag, key) => document.querySelector(`${tag}[data-key="${key}"]`);
 
   const playSound = (e) => {
-    const { key } = e;
-    const code = key.toUpperCase().charCodeAt(0);
-
-    const drumSound = findByKey(drumSounds, code);
+    const { keyCode } = e;
+    const drumSound = findByKey('audio', keyCode);
     if (!drumSound) {
       return;
     }
-    const drumDiv = findByKey(drumDivs, code);
-    drumDiv.className = 'key playing';
-    setTimeout(() => { drumDiv.className = 'key'; }, 200);
+    const key = findByKey('.key', keyCode);
+    key.classList.add('playing');
+    drumSound.currentTime = 0; // This will reset audio to start
     drumSound.play();
   };
 
-  document.addEventListener('keyup', playSound);
+  function removePlaying(e) {
+    if (e.propertyName !== 'transform') {
+      return;
+    }
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removePlaying));
+
+  window.addEventListener('keyup', playSound);
 </script>
 
 </body>

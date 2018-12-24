@@ -62,13 +62,34 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transition-timing-function: cubic-bezier(0, 1.51, 0.58, 1);
     }
 
   </style>
 
   <script>
+    const HOURS = 12;
+    const MIN_SEC = 60;
+    const OFFSET = 90;
+    const ints = ['hour', 'min', 'second'];
 
+    const setTime = () => {
+      const date = new Date();
+      const rotations = [
+        ((date.getHours() % HOURS) / HOURS) * 360,
+        (date.getMinutes() / MIN_SEC) * 360,
+        (date.getSeconds() / MIN_SEC) * 360,
+      ];
 
+      ints.forEach((interval, i) => {
+        const time = document.querySelector(`.${interval}-hand`);
+        time.style.transform = `rotate(${rotations[i] + OFFSET}deg)`;
+      });
+    };
+
+    setTime();
+    setInterval(setTime, 1000);
   </script>
 </body>
 </html>
