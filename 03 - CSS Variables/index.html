@@ -21,10 +21,23 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+  :root {
+    --base: yellow;
+    --spacing: 10px;
+    --blur: 0px;
+  }
 
-    /*
-      misc styles, nothing to do with CSS variables
-    */
+  .hl {
+    color: var(--base);
+  }
+
+  img {
+    border: 3px solid var(--base);
+    filter: blur(var(--blur));
+    -webkit-filter: blur(var(--blur));
+    padding: var(--spacing);
+    background: var(--base);
+  }
 
     body {
       text-align: center;
@@ -45,6 +58,21 @@
   </style>
 
   <script>
+    const spacing = document.getElementById('spacing');
+    const blur = document.getElementById('blur');
+    const base = document.getElementById('base');
+    const root = document.documentElement;
+
+    const handleRangeChange = function change(e) {
+      console.log(this.id);
+      let { value } = e.target;
+      value = (this.id === 'base') ? value : `${value}px`;
+      root.style.setProperty(`--${this.id}`, value);
+    };
+
+    spacing.oninput = handleRangeChange;
+    base.oninput = handleRangeChange;
+    blur.oninput = handleRangeChange;
   </script>
 
 </body>
