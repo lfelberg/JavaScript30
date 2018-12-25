@@ -26,6 +26,8 @@
     return `${str.replace(qReg, `<span class="hl">${q}</span>`)}`;
   };
 
+  const numberWithCommas = x => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
   const displayMatches = (places, q) => (
     places.map((place) => {
       const { city, state, population } = place;
@@ -33,7 +35,7 @@
       return `
         <li>
           <span class="name">${highLightedString(cityState, q)}</span>
-          <span class="population">${population}</span>
+          <span class="population">${numberWithCommas(population)}</span>
         </li>
       `;
     })
