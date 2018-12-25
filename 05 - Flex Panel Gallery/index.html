@@ -63,6 +63,22 @@
       transition: transform 0.5s;
     }
 
+    .panel > *:first-child {
+      transform: translateY(-300%);
+    }
+
+    .panel.open-active > *:first-child {
+      transform: translateY(0);
+    }
+
+    .panel > *:last-child {
+      transform: translateY(300%);
+    }
+
+    .panel.open-active > *:last-child {
+      transform: translateY(0);
+    }
+
     .panel p {
       text-transform: uppercase;
       font-family: 'Amatic SC', cursive;
@@ -77,6 +93,7 @@
 
     .panel.open {
       font-size: 40px;
+      flex: 5;
     }
   </style>
 
@@ -110,37 +127,32 @@
 
   <script>
     const panels = document.querySelectorAll('.panel');
-    const toggle = (panel, show = true) => {
-      const ps = Array.from(panel.children);
-      ps.forEach((p, i) => {
-        if ((i % 2) === 0) {
-          p.hidden = show;
-        }
-      });
+    const toggle = (panel, show = false) => {
+      if (show) {
+        panel.classList.add('open-active');
+      } else {
+        panel.classList.remove('open-active');
+      }
     };
 
-    const changeSize = (panel, size = 2) => {
-      const ps = Array.from(panel.children);
-      ps.forEach((p, i) => {
-        if ((i % 2) !== 0) {
-          p.style['font-size'] = `${size}em`;
-        }
-      });
-    };
+    // const changeSize = (panel, size = 2) => {
+    //   const ps = Array.from(panel.children);
+    //   ps.forEach((p, i) => {
+    //     if ((i % 2) !== 0) {
+    //       p.style['font-size'] = `${size}em`;
+    //     }
+    //   });
+    // };
 
     const changePs = (cb) => { panels.forEach((panel) => { cb(panel); }); };
 
     function expandPanel() {
       changePs(toggle);
-      changePs(changeSize);
-      panels.forEach((panel) => { panel.style.width = ''; });
-      this.style.width = '250px';
-      toggle(this, false);
-      changeSize(this, 4);
+      // changePs(changeSize);
+      this.classList.toggle('open');
+      toggle(this, true);
     }
 
-    changePs(toggle);
-    changePs(changeSize);
     panels.forEach(panel => panel.addEventListener('click', expandPanel));
   </script>
 </body>
