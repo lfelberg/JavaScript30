@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  const filterByCityState = (places, q) => {
+    const qReg = new RegExp(q, 'gi');
+    return places.filter(place => (place.city.match(qReg) || place.state.match(qReg)));
+  };
+
+  const highLightedString = (str, q) => {
+    const qReg = new RegExp(q, 'gi');
+    return `${str.replace(qReg, `<span class="hl">${q}</span>`)}`;
+  };
+
+  const displayMatches = (places, q) => (
+    places.map((place) => {
+      const { city, state, population } = place;
+      const cityState = `${city}, ${state}`;
+      return `
+        <li>
+          <span class="name">${highLightedString(cityState, q)}</span>
+          <span class="population">${population}</span>
+        </li>
+      `;
+    })
+  );
+
+  const search = document.querySelector('input.search');
+  const list = document.querySelector('.suggestions');
+
+  fetch(endpoint)
+    .then(data => data.json())
+    .then((places) => {
+      const filterAndDisplay = function fAndD() {
+        const filtered = filterByCityState(places, this.value);
+        const lis = displayMatches(filtered, this.value);
+        list.innerHTML = lis.join('');
+      };
+
+      search.oninput = filterAndDisplay;
+    });
+</script>
+</body>
+</html>

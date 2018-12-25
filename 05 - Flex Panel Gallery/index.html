@@ -127,30 +127,11 @@
 
   <script>
     const panels = document.querySelectorAll('.panel');
-    const toggle = (panel, show = false) => {
-      if (show) {
-        panel.classList.add('open-active');
-      } else {
-        panel.classList.remove('open-active');
-      }
-    };
-
-    // const changeSize = (panel, size = 2) => {
-    //   const ps = Array.from(panel.children);
-    //   ps.forEach((p, i) => {
-    //     if ((i % 2) !== 0) {
-    //       p.style['font-size'] = `${size}em`;
-    //     }
-    //   });
-    // };
-
-    const changePs = (cb) => { panels.forEach((panel) => { cb(panel); }); };
+    const toggle = panel => panel.classList.toggle('open-active');
 
     function expandPanel() {
-      changePs(toggle);
-      // changePs(changeSize);
       this.classList.toggle('open');
-      toggle(this, true);
+      toggle(this);
     }
 
     panels.forEach(panel => panel.addEventListener('click', expandPanel));
