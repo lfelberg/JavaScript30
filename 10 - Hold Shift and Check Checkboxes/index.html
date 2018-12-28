@@ -96,6 +96,33 @@
   </div>
 
 <script>
+const items = document.querySelectorAll('input');
+items.forEach((item, i) => { item['data-key'] = i; });
+let started = null;
+
+const selectMany = (e) => {
+  const { target } = e;
+  if (target.checked && (!e.shiftKey)) {
+    items.forEach((item, i) => {
+      if (item === target) {
+        started = i;
+      }
+    });
+  }
+
+  if (!e.shiftKey) {
+    return;
+  }
+
+  const id = Number(target['data-key']);
+  const start = (started < id) ? started : id;
+  const end = (started > id) ? started : id;
+  for (let i = start; i < end; i += 1) {
+    items[i].checked = true;
+  }
+};
+
+items.forEach(item => item.addEventListener('click', selectMany));
 </script>
 </body>
 </html>
