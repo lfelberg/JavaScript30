@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+const seqs = 'lisarocks';
+let current = -1;
+
+const konamiListen = (e) => {
+  const { key } = e;
+  if (key === seqs[current + 1]) {
+    current += 1;
+    if (current === (seqs.length - 1)) {
+      cornify_add();
+      current = -1;
+    }
+  } else {
+    current = -1;
+  }
+};
+
+window.addEventListener('keyup', konamiListen);
+</script>
+</body>
+</html>
