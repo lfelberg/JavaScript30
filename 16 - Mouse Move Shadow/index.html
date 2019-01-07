@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>🔥WOAH!</h1>
+  </div>
+
+  <style>
+  html {
+    color: black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+  }
+  </style>
+
+<script>
+const hero = document.querySelector('.hero');
+const woah = document.querySelector('h1');
+
+const getElCenterSize = (el) => {
+  const {
+    offsetTop,
+    offsetHeight,
+    offsetLeft,
+    offsetWidth,
+  } = el;
+  return [
+    offsetLeft + 0.5 * offsetWidth,
+    offsetTop + 0.5 * offsetHeight,
+    offsetWidth,
+    offsetHeight,
+  ];
+};
+
+const setShadow = (el, oX, oY) => {
+  const [x, y, dx, dy] = getElCenterSize(el);
+  const offX = 10 * ((x - oX) / dx);
+  const offY = 10 * ((y - oY) / dy);
+  el.style.textShadow = `
+    ${offX}px ${offY}px 0 rgba(0,0,0,1),
+    ${-1 * offX}px ${-1 * offY}px 0 rgba(255,0,0,1),
+    ${-1 * offX}px ${offY}px 0 rgba(255,255,0,1)
+  `;
+};
+
+function trackMouse(e) {
+  let { offsetX: x, offsetY: y } = e;
+  if (this !== e.target) {
+    x += e.offsetLeft;
+    y += e.offsetTop;
+  }
+
+  setShadow(woah, x, y);
+}
+
+hero.addEventListener('mousemove', trackMouse);
+</script>
+</body>
+</html>
