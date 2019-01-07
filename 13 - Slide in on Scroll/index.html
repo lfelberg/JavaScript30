@@ -61,11 +61,11 @@
       const currentPos = window.scrollY + window.innerHeight;
       photos.forEach(photo => {
         const { height, offsetTop } = photo;
-        const imageMid = offsetTop + height / 2;
-        const imageEnd = offsetTop + height;
-        if (currentPos > imageMid) {
+        const imageMid = (currentPos > (offsetTop + height / 2)) ? true : false;
+        const imageEnd = (window.scrollY < (offsetTop + height)) ? true : false;
+        if (imageMid && imageEnd) {
           photo.classList.add('active');
-        } else if (currentPos > imageEnd) {
+        } else {
           photo.classList.remove('active');
         }
       })

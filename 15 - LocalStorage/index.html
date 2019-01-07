@@ -26,10 +26,51 @@
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+const addItems = document.querySelector('.add-items');
+const itemsList = document.querySelector('.plates');
+const items = JSON.parse(localStorage.getItem('items')) || [];
 
+const createLI = (item, i) => {
+  const { text, isSelected } = item;
+  const checked = (isSelected) ? 'checked' : '';
+  return `
+    <li>
+      <input type="checkbox" id="item${i}" data-index="${i}" ${checked}>
+      <label for="item${i}">${text}</label>
+    </li>
+  `;
+};
+
+const toggleIsSelected = (e, plates) => {
+  if (!e.target.matches('input')) {
+    return;
+  }
+  const { target } = e;
+  const { index } = target.dataset;
+  const { isSelected } = plates[index];
+  plates[index].isSelected = !isSelected;
+  localStorage.setItem('items', JSON.stringify(items));
+};
+
+function populateList(plates = [], platesList) {
+  let list = '';
+  plates.forEach((item, i) => { list += createLI(item, i); });
+  platesList.innerHTML = list;
+}
+
+function addItemToList(e) {
+  e.preventDefault();
+  const text = this.querySelector('[name=item]').value;
+  const item = { text, isSelected: false };
+  this.reset();
+  items.push(item);
+  localStorage.setItem('items', JSON.stringify(items));
+  populateList(items, itemsList);
+}
+
+addItems.addEventListener('submit', addItemToList);
+itemsList.addEventListener('click', e => toggleIsSelected(e, items));
+populateList(items, itemsList);
 </script>
 
 
