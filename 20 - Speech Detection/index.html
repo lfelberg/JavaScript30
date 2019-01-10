@@ -10,9 +10,31 @@
   </div>
 
 <script>
-  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
 
+let p = document.createElement('p');
+const words = document.querySelector('.words');
+words.appendChild(p);
 
+const printWordsToPage = (e) => {
+  const transcript = Array.from(e.results)
+    .map(result => result[0])
+    .map(result => result.transcript)
+    .join('');
+  p.textContent = transcript;
+};
+
+const newP = () => {
+  recognition.start();
+  p = document.createElement('p');
+  words.appendChild(p);
+};
+
+recognition.addEventListener('result', printWordsToPage);
+recognition.addEventListener('end', newP);
+recognition.start();
 </script>
 
 
@@ -40,7 +62,7 @@
       position: relative;
       line-height: 3rem;
     }
-    
+
     p {
       margin: 0 0 3rem;
     }
